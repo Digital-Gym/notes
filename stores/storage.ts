@@ -27,6 +27,23 @@ export const useDbStore = defineStore('storage', () => {
     db.value = content;
     writeToStorage(content);
   }
+
+  function updateNote(note: Note): boolean {
+    db.value.forEach((x)=>{
+      if(x.id == note.id){
+        x = note;
+        writeToStorage(db.value);
+        return true;
+      }
+    });
+
+    return false;
+  }
+
+  function deleteNote(id: number){
+    db.value = db.value.filter(x=>x.id != id);
+    writeToStorage(db.value);
+  }
   
-  return { db, write }
+  return { db, write, updateNote, deleteNote }
 });

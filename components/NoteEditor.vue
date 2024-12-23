@@ -37,6 +37,7 @@ const handleStatus = (id: number, status: boolean) => {
   content.value.todo.forEach((item: TodoItem)=>{
     if(item.id == id){
       item.status = status;
+      return;
     }
   });
   saveState();
@@ -46,6 +47,7 @@ const handleInput = (id: number, task: string) => {
   content.value.todo.forEach((item: TodoItem)=>{
     if(item.id == id){
       item.task = task;
+      return;
     }
   });
 
@@ -69,12 +71,12 @@ const handleForward = () => {
 }
 
 const handleKeyboard = (e: KeyboardEvent) => {
-  if(e.ctrlKey && e.key == 'z'){
-    handleBack();
-  } 
-  else if(e.ctrlKey && e.shiftKey && e.key.toLocaleLowerCase() == 'z'){
+  if(e.ctrlKey && e.shiftKey && e.code === 'KeyZ'){
     handleForward();
   }
+  else if(e.ctrlKey && e.code === 'KeyZ'){
+    handleBack();
+  } 
 }
 
 onMounted(() => {
@@ -108,5 +110,11 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
   <div class="mt-4 ml-4 gap-3 flex select-none">
     <div class="border p-3 hover:border-red-700" @click="handleBack">Back</div>
     <div class="border p-3 hover:border-red-700" @click="handleForward">Next</div>
+  </div>
+
+  <div class="mt-4 ml-4 gap-3 flex select-none">
+    <div class="border p-3 hover:border-gray-700" @click="">Cancel</div>
+    <div class="border p-3 hover:border-green-700" @click="">Save</div>
+    <div class="border p-3 hover:border-red-700" @click="">Delete</div>
   </div>
 </template>

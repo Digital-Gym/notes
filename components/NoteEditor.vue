@@ -72,7 +72,7 @@ const handleKeyboard = (e: KeyboardEvent) => {
   if(e.ctrlKey && e.key == 'z'){
     handleBack();
   } 
-  else if(e.ctrlKey && e.shiftKey && e.key == 'z'){
+  else if(e.ctrlKey && e.shiftKey && e.key.toLocaleLowerCase() == 'z'){
     handleForward();
   }
 }

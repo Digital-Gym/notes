@@ -54,7 +54,6 @@ const focusOnEmpty = () =>{
 }
 
 onMounted(()=>{
-  console.log("hey");
   task.value.value = props.task;
   status.value = props.status;
   task.value.addEventListener("keydown", createRequest);

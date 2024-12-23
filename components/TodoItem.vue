@@ -1,37 +1,50 @@
 <script lang="ts" setup>
-import type { TodoItemWithOrder } from '~/models/TodoItem';
-import { onMounted, onUnmounted } from 'vue';
+import type { TodoItemExtra } from '~/models/TodoItem';
+import { onMounted, onUnmounted, watchEffect, watch} from 'vue';
+import { useMyFocusStore } from '~/stores/focus';
 
-const props = defineProps<TodoItemWithOrder>();
+const props = defineProps<TodoItemExtra>();
 const emit = defineEmits(['change', 'delete', 'status', 'create']);
+const focus = useMyFocusStore();
 const status = ref();
 const task = ref();
 
 const handleStatus = () => {
-  emit('status', status);
+  status.value = !status.value;
+  emit('status', props.id, status.value);
 }
 
 const handleDelete = () => {
-  emit('delete');
+  task.value.removeEventListener("keydown", createRequest);
+  emit('delete', props.id);
 }
 
 const handleInput = () => {
-  emit('change', task);
+  focus.setFocus(props.id);
+  emit('change', props.id, task.value.value);
 }
 
-const handleFocusClick = (e) => {
+const handleFocusClick = () => {
   if (task.value) {
     task.value.focus();
   }
 }
 
-const createRequest = (e) => {
-  if(e.code == "Enter"){
+watchEffect(()=>{
+  if(props.id == focus.focusedId){
+    handleFocusClick();
+  }
+});
+
+watch(() => props.status, ()=>{
+  status.value = props.status;
+});
+
+const createRequest = (e: KeyboardEvent) => {
+  if(e.code == "Enter" && task.value.value != ''){
     emit("create", props.order);
     return;
   }
-
-  
 }
 
 const focusOnEmpty = () =>{
@@ -41,13 +54,17 @@ const focusOnEmpty = () =>{
 }
 
 onMounted(()=>{
+  console.log("hey");
   task.value.value = props.task;
+  status.value = props.status;
   task.value.addEventListener("keydown", createRequest);
   focusOnEmpty();
-})
+});
 
 onUnmounted(()=>{
-  task.value.removeEventListener("keydown", createRequest);
+  if(task.value){
+    task.value.removeEventListener("keydown", createRequest);
+  }
 });
 </script>
 <template>
@@ -74,7 +91,7 @@ onUnmounted(()=>{
     </div>
 
     <div 
-      class="border rounded-full w-7 h-7 text-center"
+      class="border rounded-full w-7 h-7 text-center select-none cursor-pointer"
       @click.stop="handleDelete"
     >
       x

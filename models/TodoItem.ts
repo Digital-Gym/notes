@@ -4,6 +4,6 @@ export interface TodoItem{
   status: boolean;
 }
 
-export type TodoItemWithOrder = TodoItem & {
+export type TodoItemExtra = TodoItem & {
   order: number;
 };

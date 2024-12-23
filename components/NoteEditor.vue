@@ -3,10 +3,12 @@ import type { Note } from '~/models/Note';
 import { EditorHistory, EditorMemento } from '~/services/NoteService';
 import type { TodoItem } from '~/models/TodoItem';
 import { useMyFocusStore } from '~/stores/focus';
+import { useDbStore } from '~/stores/storage';
 
 const props = defineProps<Note>();
 const focus = useMyFocusStore();
 
+const db = useDbStore();
 const content = ref(JSON.parse(JSON.stringify(props)));
 const history = new EditorHistory();
 
@@ -79,6 +81,16 @@ const handleKeyboard = (e: KeyboardEvent) => {
   } 
 }
 
+const handleSave = () => {
+  db.updateNote(content.value);
+  console.log("Changes has been saved");
+}
+
+const handleDeleteNote = () => {
+  db.deleteNote(content.value.id);
+  console.log("Deleted");
+}
+
 onMounted(() => {
   saveState();
   window.addEventListener('keydown', handleKeyboard)
@@ -114,7 +126,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
 
   <div class="mt-4 ml-4 gap-3 flex select-none">
     <div class="border p-3 hover:border-gray-700" @click="">Cancel</div>
-    <div class="border p-3 hover:border-green-700" @click="">Save</div>
-    <div class="border p-3 hover:border-red-700" @click="">Delete</div>
+    <div class="border p-3 hover:border-green-700" @click="handleSave">Save</div>
+    <div class="border p-3 hover:border-red-700" @click="handleDeleteNote">Delete</div>
   </div>
 </template>

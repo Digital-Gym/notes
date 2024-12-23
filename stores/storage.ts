@@ -29,13 +29,13 @@ export const useDbStore = defineStore('storage', () => {
   }
 
   function updateNote(note: Note): boolean {
-    db.value.forEach((x)=>{
-      if(x.id == note.id){
-        x = note;
+    for(let i = 0; i<db.value.length;i++){
+      if(db.value[i].id == note.id){
+        db.value[i] = note;
         writeToStorage(db.value);
         return true;
       }
-    });
+    }
 
     return false;
   }
@@ -44,6 +44,11 @@ export const useDbStore = defineStore('storage', () => {
     db.value = db.value.filter(x=>x.id != id);
     writeToStorage(db.value);
   }
+
+  function addNote(note: Note){
+    db.value.push(note);
+    writeToStorage(db.value);
+  }
   
-  return { db, write, updateNote, deleteNote }
+  return { db, write, updateNote, deleteNote, addNote}
 });

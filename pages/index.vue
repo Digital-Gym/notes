@@ -13,9 +13,9 @@ const handleCreate = () => {
 
 <template>
   <div>
-    <nav class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl lg:text-5xl">Главная</h1>
-      <AppButton severity="success" class="w-20" @click="handleCreate">Создать</AppButton>
+    <nav class="mb-8 flex items-center gap-3 justify-between">
+      <h1 class="text-3xl lg:text-5xl">Home page</h1>
+      <AppButton severity="success" @click="handleCreate">Создать</AppButton>
     </nav>
 
     <div class="flex flex-col gap-8">

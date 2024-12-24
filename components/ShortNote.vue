@@ -5,25 +5,37 @@ const N = 3;
 
 const props = defineProps<Note>();
 const todos = props.todo.slice(0, N);
+const storage = useDbStore();
+const router = useRouter();
+
+const handleDelete = () => {
+  storage.deleteNote(props.id);
+}
+
+const manualRoute = () => {
+  router.push({path: `notes/${props.id}`})
+}
 </script>
 
 <template>
-  <NuxtLink 
+  <div 
     class="
       hover:before:block
       before:absolute before:w-full before:h-full before:bg-slate-300
       before:hidden before:z-10 before:opacity-10
       relative border rounded-md
       "
-    :to="`notes/${props.id}`"
+    @click.self="manualRoute"
   >
 
   <!-- delete button -->
-  <div class="
+  <div 
+    class="
     z-10 w-7 h-7 absolute top-4 right-4 hover:bg-red-500 bg-slate-200 rounded-md
     flex items-center justify-center hover:text-slate-100 text-slate-400
     transiton
     "
+    @click.self="handleDelete"
   >
     <IconsTrashIcon />
   </div>
@@ -59,5 +71,5 @@ const todos = props.todo.slice(0, N);
       </div>
     </div>
     <div class="absolute bottom-0 left-0 w-full h-2/4 bg-gradient-to-b from-transparent to-white pointer-events-none rounded-lg"></div>
-  </NuxtLink>
+  </div>
 </template>

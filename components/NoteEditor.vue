@@ -135,36 +135,56 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
   <input 
     type="text"
     ref="title"
-    class="focus:outline-none text-5xl"
+    class="focus:outline-none text-4xl md:text-5xl mb-8"
     @input="handleTitleInput"
     maxlength="20"
   >
   <br>
 
-  <div class="flex justify-end gap-3 select-none">
-    <AppButton
-      severity="secondary"
-      @click="handleCancel"
-    >
-      Cancel
-    </AppButton>
-    <AppButton
-      severity="success"
-      @click="handleSave"
-    >
-      Save
-    </AppButton>
-    <AppButton
-      severity="danger"
-      @click="handleDeleteNote"
-    >
-      Delete
-    </AppButton>
-  </div>
+  <nav class="flex items-center justify-between flex-wrap gap-3">
+    <div class="gap-3 flex select-none">
+      <AppButton 
+        severity="secondary"
+        @click="handleBack"
+      >
+        <code>Ctrl+Z</code>
+      </AppButton>
+      <AppButton 
+        severity="secondary"
+        @click="handleForward"
+      >
+        <code>Ctrl+Shift+Z</code>
+      </AppButton>
+    </div>
+  
+    <div class="flex justify-end gap-3 select-none">
+      <AppButton
+        severity="secondary"
+        @click="handleCancel"
+      >
+        Отмена
+      </AppButton>
+      <AppButton
+        severity="success"
+        @click="handleSave"
+      >
+        Сохранить
+      </AppButton>
+      <AppButton
+        severity="danger"
+        @click="handleDeleteNote"
+      >
+        Удалить
+      </AppButton>
+    </div>
+  </nav>
 
   <br>
 
-  <div class="flex flex-col gap-3">
+  <div 
+    class="flex flex-col gap-3" 
+    v-if="content.todo.length > 0"
+  >
     <TodoItem 
       v-for="(item, index) in content.todo"
       :key="`${item.id}-${item.task}`"
@@ -178,19 +198,11 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
       @change="handleInput"
     />
   </div>
-
-  <div class="mt-4 ml-4 gap-3 flex select-none">
-    <AppButton 
-      severity="secondary"
-      @click="handleBack"
-    >
-      Back
-    </AppButton>
-    <AppButton 
-      severity="secondary"
-      @click="handleForward"
-    >
-      Next
-    </AppButton>
-  </div>
+  <AppButton
+    v-else
+    severity="info"
+    @click="handleCreate(content.todo.length - 1)"
+  >
+    Создать
+  </AppButton>
 </template>

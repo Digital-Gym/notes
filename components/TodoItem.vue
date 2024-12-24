@@ -41,12 +41,17 @@ watch(() => props.status, ()=>{
 });
 
 const createRequest = (e: KeyboardEvent) => {
-  if(e.code == "Enter" && task.value.value != ''){
+  if(e.code==="Enter" && task.value.value != ''){
     if(e.ctrlKey){
       return;
     }
     emit("create", props.order);
     return;
+  }
+  
+  // mobile
+  else if(e.keyCode==13 && task.value.value != ''){
+    emit("create", props.order);
   }
 }
 

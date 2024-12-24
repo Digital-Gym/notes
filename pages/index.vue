@@ -5,7 +5,7 @@ const storage = useDbStore();
 const router = useRouter();
 
 const handleCreate = () => {
-  const empty = makeNote(storage.getAvailableId(), "Ваше название...", [])
+  const empty = makeNote(storage.getAvailableId(), "Название...", [])
   storage.addNote(empty);
   router.push({path: `/notes/${empty.id}`})
 }
@@ -13,9 +13,9 @@ const handleCreate = () => {
 
 <template>
   <div>
-    <nav class="flex justify-between items-center">
-      <h1 class="text-3xl lg:text-5xl mb-8">Home page</h1>
-      <AppButton severity="success" class="w-20" @click="handleCreate">Add</AppButton>
+    <nav class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl lg:text-5xl">Главная</h1>
+      <AppButton severity="success" class="w-20" @click="handleCreate">Создать</AppButton>
     </nav>
 
     <div class="flex flex-col gap-8">

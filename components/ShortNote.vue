@@ -7,17 +7,33 @@ const props = defineProps<Note>();
 const todos = props.todo.slice(0, N);
 const storage = useDbStore();
 const router = useRouter();
+const isOpen = ref(false);
 
 const handleDelete = () => {
-  storage.deleteNote(props.id);
+  isOpen.value = true;
 }
 
 const manualRoute = () => {
   router.push({path: `notes/${props.id}`})
 }
+
+const handleReject = () => {
+  isOpen.value = false;
+}
+
+const handleAccept = () => {
+  isOpen.value = false;
+  storage.deleteNote(props.id);
+}
 </script>
 
 <template>
+  <ConfirmDialog 
+    :is-open="isOpen"
+    text="Вы уверены?"
+    @reject="handleReject"
+    @accept="handleAccept"
+  />
   <div 
     class="
       hover:before:block
@@ -35,7 +51,7 @@ const manualRoute = () => {
     flex items-center justify-center hover:text-slate-100 text-slate-400
     transiton
     "
-    @click.self="handleDelete"
+    @click.stop="handleDelete"
   >
     <IconsTrashIcon />
   </div>

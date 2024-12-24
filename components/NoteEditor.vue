@@ -14,6 +14,9 @@ const content = ref(JSON.parse(JSON.stringify(props)));
 const history = new EditorHistory();
 const title = ref();
 
+const isDeleting = ref(false);
+const isBack = ref(false);
+
 const saveState = () => {
   history.push(new EditorMemento(JSON.parse(JSON.stringify(content.value))));
 }
@@ -111,14 +114,22 @@ const handleSave = () => {
 }
 
 const handleDeleteNote = () => {
-   // todo: confirmation dialog
+  isDeleting.value = true;
+}
+
+const handleCancel = () => {
+  isBack.value = true;
+}
+
+const noteDeleteAccept = () => {
+  isDeleting.value = false;
   db.deleteNote(content.value.id);
   router.push({path: '/'});
   console.log("Deleted");
 }
 
-const handleCancel = () => {
-  // todo: confirmation dialog
+const noteEditCancel = () => {
+  isBack.value = false;
   router.push({path: '/'});
 }
 
@@ -132,6 +143,18 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
 </script>
 
 <template>
+  <ConfirmDialog 
+    :is-open="isDeleting"
+    text="Уверены что хотите удалить запись?"
+    @accept="noteDeleteAccept"
+    @reject="isDeleting = false"
+  />
+  <ConfirmDialog 
+    :is-open="isBack"
+    text="Отменить изменения? Они не сохранятся!"
+    @accept="noteEditCancel"
+    @reject="isBack = false"
+  />
   <input 
     type="text"
     ref="title"

@@ -50,5 +50,14 @@ export const useDbStore = defineStore('storage', () => {
     writeToStorage(db.value);
   }
   
-  return { db, write, updateNote, deleteNote, addNote}
+  function getAvailableId(){
+    if(db.value.length == 0){
+      return 1;
+    }
+    
+    const max = Math.max(...db.value.map(x=>x.id));
+    return max + 1;
+  }
+
+  return { db, write, updateNote, deleteNote, addNote, getAvailableId }
 });

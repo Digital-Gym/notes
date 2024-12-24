@@ -42,6 +42,9 @@ watch(() => props.status, ()=>{
 
 const createRequest = (e: KeyboardEvent) => {
   if(e.code == "Enter" && task.value.value != ''){
+    if(e.ctrlKey){
+      return;
+    }
     emit("create", props.order);
     return;
   }
@@ -68,7 +71,7 @@ onUnmounted(()=>{
 </script>
 <template>
   <div 
-    class="border flex gap-3 justify-between p-3 rounded"
+    class="border-b flex gap-3 justify-between px-6 py-5"
     @click.self="handleFocusClick"
   >
     <div class="flex items-center gap-3">
@@ -89,12 +92,16 @@ onUnmounted(()=>{
       >
     </div>
 
-    <div 
-      class="border rounded-full w-7 h-7 text-center select-none cursor-pointer"
-      @click.stop="handleDelete"
+    <div class="
+    z-10 w-7 h-7 top-4 right-4 hover:text-red-500 rounded-full
+    flex items-center justify-center hover:bg-slate-50 text-slate-400
+    transition
+    "
+    @click.stop="handleDelete"
     >
-      x
+      <IconsCrossIcon />
     </div>
+
   </div>
 </template>
 

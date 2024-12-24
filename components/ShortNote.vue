@@ -11,16 +11,18 @@ const todos = props.todo.slice(0, N);
   <NuxtLink 
     class="
       hover:before:block
-      before:absolute before:w-full before:h-full before:bg-slate-400
+      before:absolute before:w-full before:h-full before:bg-slate-300
       before:hidden before:z-10 before:opacity-10
       relative border rounded-md
       "
     :to="`notes/${props.id}`"
-  > 
+  >
 
+  <!-- delete button -->
   <div class="
     z-10 w-7 h-7 absolute top-4 right-4 hover:bg-red-500 bg-slate-200 rounded-md
     flex items-center justify-center hover:text-slate-100 text-slate-400
+    transiton
     "
   >
     <IconsTrashIcon />

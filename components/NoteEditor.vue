@@ -12,14 +12,25 @@ const router = useRouter();
 const db = useDbStore();
 const content = ref(JSON.parse(JSON.stringify(props)));
 const history = new EditorHistory();
+const title = ref();
 
 const saveState = () => {
   history.push(new EditorMemento(JSON.parse(JSON.stringify(content.value))));
 }
 
-const handleCreate = (index: number) => {  
+const getAvailableId = () => {
+  if(content.value.todo.length == 0){
+      return 1;
+  }
+    
+  const max = Math.max(...content.value.todo.map((x: TodoItem) => x.id));
+  return max + 1;
+}
+
+const handleCreate = (index: number) => {
+
   const empty = {
-    id: content.value.todo.length,
+    id: getAvailableId(),
     task: "",
     status: false
   } as TodoItem;
@@ -57,6 +68,11 @@ const handleInput = (id: number, task: string) => {
   saveState();
 }
 
+const handleTitleInput = () => {
+  content.value.title = title.value.value;
+  saveState();
+}
+
 const handleBack = () => {
   const previousState = history.pop();
 
@@ -79,7 +95,14 @@ const handleKeyboard = (e: KeyboardEvent) => {
   }
   else if(e.ctrlKey && e.code === 'KeyZ'){
     handleBack();
-  } 
+  }
+  else if(e.ctrlKey && e.code == "Enter"){
+    handleCreate(content.value.todo.length - 1);
+  }
+  else if(e.ctrlKey && e.code == "KeyS"){
+    e.preventDefault(); 
+    handleSave();
+  }
 }
 
 const handleSave = () => {
@@ -100,6 +123,8 @@ const handleCancel = () => {
 }
 
 onMounted(() => {
+  title.value.value = props.title;
+  title.value.focus();
   saveState();
   window.addEventListener('keydown', handleKeyboard)
 });
@@ -107,15 +132,34 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
 </script>
 
 <template>
-  <h1 class="text-5xl">
-    {{ props.title }}
-  </h1>
+  <input 
+    type="text"
+    ref="title"
+    class="focus:outline-none text-5xl"
+    @input="handleTitleInput"
+    maxlength="20"
+  >
   <br>
 
   <div class="flex justify-end gap-3 select-none">
-    <div class="border p-3 hover:border-gray-700" @click="handleCancel">Cancel</div>
-    <div class="border p-3 hover:border-green-700" @click="handleSave">Save</div>
-    <div class="border p-3 hover:border-red-700" @click="handleDeleteNote">Delete</div>
+    <AppButton
+      severity="secondary"
+      @click="handleCancel"
+    >
+      Cancel
+    </AppButton>
+    <AppButton
+      severity="success"
+      @click="handleSave"
+    >
+      Save
+    </AppButton>
+    <AppButton
+      severity="danger"
+      @click="handleDeleteNote"
+    >
+      Delete
+    </AppButton>
   </div>
 
   <br>
@@ -136,7 +180,17 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
   </div>
 
   <div class="mt-4 ml-4 gap-3 flex select-none">
-    <div class="border p-3 hover:border-red-700" @click="handleBack">Back</div>
-    <div class="border p-3 hover:border-red-700" @click="handleForward">Next</div>
+    <AppButton 
+      severity="secondary"
+      @click="handleBack"
+    >
+      Back
+    </AppButton>
+    <AppButton 
+      severity="secondary"
+      @click="handleForward"
+    >
+      Next
+    </AppButton>
   </div>
 </template>

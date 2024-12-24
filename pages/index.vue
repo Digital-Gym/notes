@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import type { TodoItem } from "~/models/TodoItem";
-
-const todos: TodoItem[] = [
-  {id: 0, task: "Eat banana", status: false},
-  {id: 1, task: "Go to gym", status: true},
-  {id: 2, task: "Have a nice day", status: false},
-  {id: 3, task: "Complete project", status: true}
-]
+import { makeNote } from '~/models/Note';
 
 const storage = useDbStore();
+const router = useRouter();
 
+const handleCreate = () => {
+  const empty = makeNote(storage.getAvailableId(), "Ваше название...", [])
+  storage.addNote(empty);
+  router.push({path: `/notes/${empty.id}`})
+}
 </script>
 
 <template>
   <div>
-    <h1 class="text-5xl mb-8">Home page</h1>
+    <nav class="flex justify-between items-center">
+      <h1 class="text-3xl lg:text-5xl mb-8">Home page</h1>
+      <AppButton severity="success" class="w-20" @click="handleCreate">Add</AppButton>
+    </nav>
 
     <div class="flex flex-col gap-8">
       <ShortNote 

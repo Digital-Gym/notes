@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { makeNote } from "~/models/Note";
 import type { TodoItem } from "~/models/TodoItem";
 
 const todos: TodoItem[] = [
@@ -9,15 +8,22 @@ const todos: TodoItem[] = [
   {id: 3, task: "Complete project", status: true}
 ]
 
-const db = useDbStore();
-const note = makeNote(db.db.length, `Note #${db.db.length}`, todos);
-db.addNote(note);
+const storage = useDbStore();
+
 </script>
 
 <template>
-  <NoteEditor
-    :id="note.id"
-    :title="note.title"
-    :todo="note.todo"
-  />
+  <div>
+    <h1 class="text-5xl mb-8">Home page</h1>
+
+    <div class="flex flex-col gap-8">
+      <ShortNote 
+        v-for="note in storage.db"
+        :key="note.id"
+        :id="note.id"
+        :title="note.title"
+        :todo="note.todo"
+      />
+    </div>
+  </div>
 </template>

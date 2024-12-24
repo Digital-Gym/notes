@@ -68,7 +68,7 @@ onUnmounted(()=>{
 </script>
 <template>
   <div 
-    class="border w-2/5 flex gap-3 justify-between p-3 rounded"
+    class="border flex gap-3 justify-between p-3 rounded"
     @click.self="handleFocusClick"
   >
     <div class="flex items-center gap-3">

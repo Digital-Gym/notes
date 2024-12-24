@@ -8,6 +8,7 @@ import { useDbStore } from '~/stores/storage';
 const props = defineProps<Note>();
 const focus = useMyFocusStore();
 
+const router = useRouter();
 const db = useDbStore();
 const content = ref(JSON.parse(JSON.stringify(props)));
 const history = new EditorHistory();
@@ -87,8 +88,14 @@ const handleSave = () => {
 }
 
 const handleDeleteNote = () => {
+   // todo: confirmation dialog
   db.deleteNote(content.value.id);
   console.log("Deleted");
+}
+
+const handleCancel = () => {
+  // todo: confirmation dialog
+  router.push({path: '/'});
 }
 
 onMounted(() => {
@@ -125,7 +132,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
   </div>
 
   <div class="mt-4 ml-4 gap-3 flex select-none">
-    <div class="border p-3 hover:border-gray-700" @click="">Cancel</div>
+    <div class="border p-3 hover:border-gray-700" @click="handleCancel">Cancel</div>
     <div class="border p-3 hover:border-green-700" @click="handleSave">Save</div>
     <div class="border p-3 hover:border-red-700" @click="handleDeleteNote">Delete</div>
   </div>

@@ -90,6 +90,7 @@ const handleSave = () => {
 const handleDeleteNote = () => {
    // todo: confirmation dialog
   db.deleteNote(content.value.id);
+  router.push({path: '/'});
   console.log("Deleted");
 }
 
@@ -111,6 +112,14 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
   </h1>
   <br>
 
+  <div class="flex justify-end gap-3 select-none">
+    <div class="border p-3 hover:border-gray-700" @click="handleCancel">Cancel</div>
+    <div class="border p-3 hover:border-green-700" @click="handleSave">Save</div>
+    <div class="border p-3 hover:border-red-700" @click="handleDeleteNote">Delete</div>
+  </div>
+
+  <br>
+
   <div class="flex flex-col gap-3">
     <TodoItem 
       v-for="(item, index) in content.todo"
@@ -129,11 +138,5 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard));
   <div class="mt-4 ml-4 gap-3 flex select-none">
     <div class="border p-3 hover:border-red-700" @click="handleBack">Back</div>
     <div class="border p-3 hover:border-red-700" @click="handleForward">Next</div>
-  </div>
-
-  <div class="mt-4 ml-4 gap-3 flex select-none">
-    <div class="border p-3 hover:border-gray-700" @click="handleCancel">Cancel</div>
-    <div class="border p-3 hover:border-green-700" @click="handleSave">Save</div>
-    <div class="border p-3 hover:border-red-700" @click="handleDeleteNote">Delete</div>
   </div>
 </template>

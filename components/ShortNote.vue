@@ -9,10 +9,22 @@ const todos = props.todo.slice(0, N);
 
 <template>
   <NuxtLink 
-    class="relative border rounded"
+    class="
+      hover:before:block
+      before:absolute before:w-full before:h-full before:bg-slate-400
+      before:hidden before:z-10 before:opacity-10
+      relative border rounded-md
+      "
     :to="`notes/${props.id}`"
+  > 
+
+  <div class="
+    z-10 w-7 h-7 absolute top-4 right-4 hover:bg-red-500 bg-slate-200 rounded-md
+    flex items-center justify-center hover:text-slate-100 text-slate-400
+    "
   >
-    <div class="z-10 absolute bg-slate-400 w-full h-full opacity-0 hover:opacity-5"></div>
+    <IconsTrashIcon />
+  </div>
 
     <!-- content -->
     <div class="p-5">
@@ -31,20 +43,19 @@ const todos = props.todo.slice(0, N);
               readonly
             />
   
-            <input 
+            <p 
               type="text"
-              :value="item.task"
               :class="{
                 'line-through': item.status,
               }"
               class="focus:outline-none"
-              readonly
             >
+              {{ item.task }}
+            </p>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-b from-transparent to-white pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-full h-2/4 bg-gradient-to-b from-transparent to-white pointer-events-none rounded-lg"></div>
   </NuxtLink>
 </template>
